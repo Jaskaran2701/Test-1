@@ -34,7 +34,7 @@ export default function Dashboard() {
 
     console.log(localStorage.getItem("userToken"))
   axios
-    .get(`http://192.168.29.65:8000/hotel/dashboard`,{headers:{Authorization:`Bearer${staticToken}`}})
+    .get(`https://cs-api.nugen.co.in/hotel/dashboard`,{ headers:{ Authorization: `Bearer ${staticToken}`}})
     .then((response) => {
     //   setApiData(response)
       console.log(response);

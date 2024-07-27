@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
+import classNames from "classnames";
 
 type AuthDataType = {
   email: string;
@@ -9,7 +10,7 @@ type AuthDataType = {
 };
 
 export default function Login() {
-  const router = useRouter()
+  const router = useRouter();
 
   const [authData, setAuthData] = useState<AuthDataType>({
     email: "",
@@ -28,24 +29,44 @@ export default function Login() {
     }
   };
 
-  const [isSubmit, setIsSubmit] = useState<boolean>(false); //used for empty fields validation
+  const [emptyField, setEmptyFieldError] = useState<{emailError:boolean,passwordError:boolean}>({
+    emailError: false,
+    passwordError: false,
+  });
+
+  function checkEmailEmptyField(){
+    if(authData.email.length==0){
+      setEmptyFieldError({...emptyField,emailError:true})
+    }
+    else{
+      setEmptyFieldError({...emptyField,emailError:false})
+    }
+  }
+
+  function checkPasswordEmpytField(){
+    if(authData.password.length==0){
+      setEmptyFieldError({...emptyField,passwordError:true})
+    }
+    else{
+      setEmptyFieldError({...emptyField,passwordError:false})
+    }
+  }
 
   const [apiResponse, setApiResposne] = useState<string>(); //for storing api data
 
   const submit = () => {
-    setIsSubmit(!isSubmit);
-    if (authData.email.length != 0 && authData.password.length != 0) {
       axios
-        .post("http://192.168.29.65:8000/auth/login", authData)
+        .post("https://cs-api.nugen.co.in/auth/login", authData)
         .then((response) => {
           localStorage.setItem("userToken", response.data.accessToken);
           setApiResposne(response.data.message);
-          setTimeout(()=>{router.push('/dashboard'),console.log('function fs')},1000)
+          setTimeout(() => {
+            router.push("/dashboard"), console.log("function fs");
+          }, 1000);
         })
         .catch((error) => {
           setApiResposne(error.response.data.message);
         });
-    }
   };
 
   return (
@@ -57,21 +78,21 @@ export default function Login() {
         <input
           type="email"
           id="email"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  w-full p-2.5"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring focus:ring-blue-500 w-full p-2.5"
           placeholder="Enter Your Email"
           required
           onChange={(e) => {
             setAuthData({ ...authData, email: e.target.value });
             emailVlaidation(e.target.value);
-            setIsSubmit(false);
           }}
+          onKeyUp={checkEmailEmptyField}
         />
         {!validateEmail && authData.email.length > 0 && (
           <label htmlFor="email" className="text-sm font-medium text-red-600">
             Enter a valid email
           </label>
         )}
-        {isSubmit && authData.email.length == 0 && (
+        {emptyField.emailError && (
           <label className="text-sm font-medium text-red-600">
             Email field cannot be left empty
           </label>
@@ -84,22 +105,30 @@ export default function Login() {
         <input
           type="password"
           id="password"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  w-full p-2.5"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring focus:ring-blue-500 w-full p-2.5"
           placeholder="Enter your password"
           required
           onChange={(e) => {
             setAuthData({ ...authData, password: e.target.value });
-            setIsSubmit(false);
           }}
+          onKeyUp={checkPasswordEmpytField}
         />
-        {isSubmit && authData.password.length == 0 && (
+        {emptyField.passwordError && (
           <label className="text-sm font-medium text-red-600">
             Password field cannot be left empty
           </label>
         )}
       </div>
       <div className="text-white">{apiResponse}</div>
-      <button onClick={submit} className="w-40 h-8 rounded bg-blue-500">
+      <button
+        onClick={submit}
+        className={classNames(
+          "w-40 h-8 rounded bg-blue-500",
+          (authData.email.length == 0 || authData.password.length == 0) &&
+            "opacity-[20%] bg-white cursor-not-allowed"
+        )}
+        disabled={authData.email.length == 0 || authData.password.length == 0}
+      >
         Submit
       </button>
     </div>
