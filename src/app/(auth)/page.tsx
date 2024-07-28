@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import classNames from "classnames";
+import { Eye,EyeOff } from "lucide-react";
 
 type AuthDataType = {
   email: string;
@@ -18,6 +19,8 @@ export default function Login() {
   });
 
   const [validateEmail, setValidateEmail] = useState<boolean>(); //used for valid email validation
+
+  const [showPassword,setShowPassword] = useState<boolean>(false);
 
   const emailVlaidation = (value: string) => {
     const emailRegular = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -103,11 +106,14 @@ export default function Login() {
         )}
       </div>
       <div className="flex flex-col gap-2 w-96">
+        <div className="flex justify-between">
         <label htmlFor="password" className="text-sm font-medium text-white">
           Password
         </label>
+        <button className="text-white hover:text-blue-600" onClick={()=>{setShowPassword(!showPassword)}}>{showPassword ? <EyeOff/> : <Eye/>}</button>
+        </div>
         <input
-          type="password"
+          type={showPassword ? "text" : "password"}
           id="password"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring focus:ring-blue-500 w-full p-2.5"
           placeholder="Enter your password"
