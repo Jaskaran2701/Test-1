@@ -17,14 +17,14 @@ type ApiDataType = {
 
 const dummyData: ApiDataType = {
   totalRoomsStatus: {
-    occupied: 0,
-    vacant: 11,
+    occupied: 22,
+    vacant: 12,
   },
-  totalHotels: 11,
-  foodOrders: 0,
-  foodRevenue: 0,
-  delayServices: 0,
-  runningServices: 0,
+  totalHotels: 32,
+  foodOrders: 6,
+  foodRevenue: 400,
+  delayServices: 2,
+  runningServices: 5,
 };
 
 export default function Dashboard() {
