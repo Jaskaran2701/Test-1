@@ -48,8 +48,10 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col gap-6 2xl:gap-20 items-center">
       <div className="w-full items-center justify-center flex text-6xl mt-4 2xl:mt-14">
-        <span className="text-white">DASH</span><span className="text-blue-600">BOARD</span></div>
-      <div className="grid grid-cols-4 gap-4 justify-center">
+        <span className="text-white">DASH</span>
+        <span className="text-blue-600">BOARD</span>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 justify-center">
         {/* Didn't use mapping as object have nested objects */}
         <Card
           value={apiData.totalRoomsStatus.occupied}

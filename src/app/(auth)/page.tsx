@@ -78,7 +78,7 @@ export default function Login() {
         <span className="text-white">Log</span>
         <span className="text-blue-600">In</span>
       </div>
-      <div className="flex flex-col gap-2  w-96">
+      <div className="flex flex-col gap-2 w-60 md:w-96">
         <label htmlFor="email" className="text-sm font-medium text-white">
           Email
         </label>
@@ -105,7 +105,7 @@ export default function Login() {
           </label>
         )}
       </div>
-      <div className="flex flex-col gap-2 w-96">
+      <div className="flex flex-col gap-2 w-60 md:w-96">
         <div className="flex justify-between">
         <label htmlFor="password" className="text-sm font-medium text-white">
           Password
