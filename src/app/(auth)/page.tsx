@@ -21,7 +21,6 @@ export default function Login() {
 
   const emailVlaidation = (value: string) => {
     const emailRegular = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    console.log(emailRegular.test(value));
     if (emailRegular.test(value)) {
       setValidateEmail(true);
     } else {
@@ -29,49 +28,54 @@ export default function Login() {
     }
   };
 
-  const [emptyField, setEmptyFieldError] = useState<{emailError:boolean,passwordError:boolean}>({
+  const [emptyField, setEmptyFieldError] = useState<{
+    emailError: boolean;
+    passwordError: boolean;
+  }>({
     emailError: false,
     passwordError: false,
   });
 
-  function checkEmailEmptyField(){
-    if(authData.email.length==0){
-      setEmptyFieldError({...emptyField,emailError:true})
-    }
-    else{
-      setEmptyFieldError({...emptyField,emailError:false})
+  function checkEmailEmptyField() {
+    if (authData.email.length == 0) {
+      setEmptyFieldError({ ...emptyField, emailError: true });
+    } else {
+      setEmptyFieldError({ ...emptyField, emailError: false });
     }
   }
 
-  function checkPasswordEmpytField(){
-    if(authData.password.length==0){
-      setEmptyFieldError({...emptyField,passwordError:true})
-    }
-    else{
-      setEmptyFieldError({...emptyField,passwordError:false})
+  function checkPasswordEmpytField() {
+    if (authData.password.length == 0) {
+      setEmptyFieldError({ ...emptyField, passwordError: true });
+    } else {
+      setEmptyFieldError({ ...emptyField, passwordError: false });
     }
   }
 
   const [apiResponse, setApiResposne] = useState<string>(); //for storing api data
 
   const submit = () => {
-      axios
-        .post("https://cs-api.nugen.co.in/auth/login", authData)
-        .then((response) => {
-          localStorage.setItem("userToken", response.data.accessToken);
-          setApiResposne(response.data.message);
-          setTimeout(() => {
-            router.push("/dashboard"), console.log("function fs");
-          }, 1000);
-        })
-        .catch((error) => {
-          setApiResposne(error.response.data.message);
-        });
+    axios
+      .post("https://cs-api.nugen.co.in/auth/login", authData)
+      .then((response) => {
+        localStorage.setItem("userToken", response.data.accessToken);
+        setApiResposne(response.data.message);
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 1000);
+      })
+      .catch((error) => {
+        setApiResposne(error.response.data.message);
+      });
   };
 
   return (
     <div className="flex flex-col items-center h-screen justify-center gap-4">
-      <div className="flex flex-col gap-2 w-96">
+      <div className="w-full items-center justify-center flex text-6xl mt-4">
+        <span className="text-white">Log</span>
+        <span className="text-blue-600">In</span>
+      </div>
+      <div className="flex flex-col gap-2  w-96">
         <label htmlFor="email" className="text-sm font-medium text-white">
           Email
         </label>
@@ -123,7 +127,7 @@ export default function Login() {
       <button
         onClick={submit}
         className={classNames(
-          "w-40 h-8 rounded bg-blue-500",
+          "w-40 h-8 rounded bg-blue-500 hover:text-black hover:bg-slate-200",
           (authData.email.length == 0 || authData.password.length == 0) &&
             "opacity-[20%] bg-white cursor-not-allowed"
         )}

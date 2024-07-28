@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
-import { headers } from "next/headers";
 import { useState } from "react";
+import Card from "./card";
 
 type ApiDataType = {
   totalRoomsStatus: {
@@ -15,28 +15,30 @@ type ApiDataType = {
   runningServices: number;
 };
 
-const dummyData:ApiDataType={
-    "totalRoomsStatus": {
-        "occupied": 0,
-        "vacant": 11
-    },
-    "totalHotels": 11,
-    "foodOrders": 0,
-    "foodRevenue": 0,
-    "delayServices": 0,
-    "runningServices": 0
-}
+const dummyData: ApiDataType = {
+  totalRoomsStatus: {
+    occupied: 0,
+    vacant: 11,
+  },
+  totalHotels: 11,
+  foodOrders: 0,
+  foodRevenue: 0,
+  delayServices: 0,
+  runningServices: 0,
+};
 
 export default function Dashboard() {
-  const [apiData, setApiData] = useState<ApiDataType[]>([dummyData]);
+  const [apiData, setApiData] = useState<ApiDataType>(dummyData);
   const staticToken =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjVmMTNjNDRlMWQzZTVhMDc3YTdhMDciLCJpYXQiOjE3MjIwNzA0NjR9.Tc084wilUgMSl_OD2OrIQMFCrCL9DvPvoWHN3o5gOSU";
 
-    console.log(localStorage.getItem("userToken"))
+  console.log(localStorage.getItem("userToken"));
   axios
-    .get(`https://cs-api.nugen.co.in/hotel/dashboard`,{ headers:{ Authorization: `Bearer ${staticToken}`}})
+    .get(`https://cs-api.nugen.co.in/hotel/dashboard`, {
+      headers: { Authorization: `Bearer ${staticToken}` },
+    })
     .then((response) => {
-    //   setApiData(response)
+      //   setApiData(response)
       console.log(response);
     })
     .catch((error) => {
@@ -44,20 +46,22 @@ export default function Dashboard() {
     });
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center">
-      <div className="w-full">Data:</div>
-      {apiData.map((row) => (
-        <ul className="flex gap-8">
-          <li>Rooms Occupies : {row.totalRoomsStatus.occupied}</li>
-          <li>Rooms Vacant : {row.totalRoomsStatus.vacant}</li>
-          <li>food Orders : {row.foodOrders}</li>
-          <li>Total Hotel : {row.totalHotels}</li>
-          <li>food Orders : {row.foodOrders}</li>
-          <li>Food Revenue : {row.foodRevenue}</li>
-          <li>Delay Services : {row.delayServices}</li>
-          <li>Running Services : {row.runningServices}</li>
-        </ul>
-      ))}
+    <div className="flex flex-col gap-6 2xl:gap-20 items-center">
+      <div className="w-full items-center justify-center flex text-6xl mt-4 2xl:mt-14">
+        <span className="text-white">DASH</span><span className="text-blue-600">BOARD</span></div>
+      <div className="grid grid-cols-4 gap-4 justify-center">
+        {/* Didn't use mapping as object have nested objects */}
+        <Card
+          value={apiData.totalRoomsStatus.occupied}
+          label="Occupied Rooms"
+        />
+        <Card value={apiData.totalRoomsStatus.vacant} label="Vacant Rooms" />
+        <Card value={apiData.totalHotels} label="Total Hotel" />
+        <Card value={apiData.foodOrders} label="Food Orders" />
+        <Card value={apiData.foodRevenue} label="Food Revenue" />
+        <Card value={apiData.delayServices} label="Delayed Services" />
+        <Card value={apiData.runningServices} label="Running Services" />
+      </div>
     </div>
   );
 }
